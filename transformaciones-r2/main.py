@@ -47,7 +47,6 @@ def main():
     renderer = Renderer()
 
     print("\nMostrando figura original...")
-    print("(Nota: Las transformaciones se verán cuando las fórmulas estén listas)")
 
     renderer.draw(points)
     # conexión total del sistema
