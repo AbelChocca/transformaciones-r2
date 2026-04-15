@@ -12,7 +12,7 @@ class Renderer:
 
         plt.axhline(0, color = 'black', linewidth = 1)
         plt.axvline(0, color = 'black', linewidth = 1)
-        plt.grid('equal')
+        plt.grid('equal') # Creo que te quisiste referir a plt.axis('equal') porque plt.grid no acepta un str como primer parametro
         plt.legend()
 
         plt.show()
