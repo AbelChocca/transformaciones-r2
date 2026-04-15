@@ -3,8 +3,8 @@ import numpy as np
 from transformations.rotation import Rotation
 from transformations.scale import Scale
 from transformations.reflection import Reflection
+from render.renderer import Renderer
 
-# from render.renderer import Renderer
 #from animation.animator import animate
 
 
@@ -44,8 +44,12 @@ def main():
         print("Opción inválida ❌")
         return
 
-    # renderer = Renderer()
+    renderer = Renderer()
 
+    print("\nMostrando figura original...")
+    print("(Nota: Las transformaciones se verán cuando las fórmulas estén listas)")
+
+    renderer.draw(points)
     # conexión total del sistema
     # animate(transformation, renderer, points)
 
