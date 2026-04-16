@@ -30,7 +30,7 @@ def main():
     transformation = None
 
     if option == "1":
-        theta = float(input("Ángulo (rad): "))
+        theta = float(input("Ángulo (grados): "))
         transformation = Rotation(theta)
 
     elif option == "2":
