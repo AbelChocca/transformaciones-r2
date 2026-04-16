@@ -1,3 +1,4 @@
+from matplotlib.ticker import MultipleLocator, FormatStrFormatter
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -5,7 +6,7 @@ class Renderer:
     # class Renderer: Esto daba error
     def draw(self, original_pts, transformed_pts = None):
 
-        plt.figure(figsize = (6, 6))
+        fig, ax = plt.figure(figsize = (7, 7))
         plt.title("Vizualización de Transformaciones")
 
         orig = np.vstack([original_pts, original_pts[0]])
@@ -14,10 +15,12 @@ class Renderer:
         if transformed_pts is not None:
             trans = np.vstack([transformed_pts, transformed_pts[0]])
             plt.plot(trans[:, 0], trans[:, 1], "r-o", label = 'Transformada', linewidth = 2)
-
-        plt.axhline(0, color = 'black', linewidth = 1)
-        plt.axvline(0, color = 'black', linewidth = 1)
-        plt.grid(True, linestyle = '--')
+    
+        ax.xaxis.set_major_locator(MultipleLocator(0.25))
+        ax.yaxis.set_major_locator(MultipleLocator(0.25))
+        plt.axhline(0, color = 'black', linewidth = 1.3)
+        plt.axvline(0, color = 'black', linewidth = 1.3)
+        plt.grid(True, linestyle = '--', which='major', alpha=0.7)
         plt.axis('equal')
         plt.legend()
 
