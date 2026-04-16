@@ -33,9 +33,9 @@ def main():
         theta = float(input("Ángulo (rad): "))
         transformation = Rotation(theta)
 
-#    elif option == "2":
-#       factor = float(input("Factor de escala: "))
-#       transformation = Scale(factor)
+    elif option == "2":
+       factor = float(input("Factor de escala: "))
+       transformation = Scale(factor)
 
 #   elif option == "3":
 #       transformation = Reflection()
