@@ -43,14 +43,17 @@ def main():
     else:
         print("Opción inválida ❌")
         return
-    
-    transformated_points = transformation.apply(points)
 
     renderer = Renderer()
+    
+    if transformation is not None:
 
-    print("\nMostrando figura original...")
-
-    renderer.draw(points)
+        puntos_transformdos = transformation.apply(points)
+        print("\nMostrando figura original y transformada...")
+        renderer.draw(points, puntos_transformdos)
+    else:
+        print("\nMostrando solo figura original...")
+        renderer.draw(points)
     # conexión total del sistema
     # animate(transformation, renderer, points)
 
