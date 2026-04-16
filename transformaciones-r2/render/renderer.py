@@ -6,7 +6,7 @@ class Renderer:
     # class Renderer: Esto daba error
     def draw(self, original_pts, transformed_pts = None):
 
-        fig, ax = plt.figure(figsize = (7, 7))
+        fig, ax = plt.figure(figsize = (6, 6))
         plt.title("Vizualización de Transformaciones")
 
         orig = np.vstack([original_pts, original_pts[0]])
