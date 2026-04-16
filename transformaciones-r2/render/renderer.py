@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class Renderer:
-    class Renderer:
+    # class Renderer: Esto daba error
     def draw(self, original_pts, transformed_pts = None):
 
         plt.figure(figsize = (6, 6))
