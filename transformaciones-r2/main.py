@@ -4,6 +4,7 @@ from transformations.rotation import Rotation
 from transformations.scale import Scale
 from transformations.reflection import Reflection
 from render.renderer import Renderer
+from animations.animation import animate
 
 #from animation.animator import animate
 
@@ -44,17 +45,13 @@ def main():
         print("Opción inválida ❌")
         return
 
-    renderer = Renderer()
+    # renderer = Renderer()
     
-    if transformation is not None:
-        
-        print("\n¡Iniciando transformación y animación!")
-        animate(transformation, points)
-    else:
-        
-        print("\nMostrando solo figura original...")
-        renderer.draw(points) 
-    # conexión total del sistema
+    transformed_points = transformation.apply(points)
+
+    print("\n¡Iniciando transformación y animación!")
+    animate(points, transformed_points, 20)
+
     # animate(transformation, renderer, points)
 
 
