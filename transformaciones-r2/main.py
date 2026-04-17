@@ -47,13 +47,13 @@ def main():
     renderer = Renderer()
     
     if transformation is not None:
-
-        puntos_transformdos = transformation.apply(points)
-        print("\nMostrando figura original y transformada...")
-        renderer.draw(points, puntos_transformdos)
+        
+        print("\n¡Iniciando transformación y animación!")
+        animate(transformation, points)
     else:
+        
         print("\nMostrando solo figura original...")
-        renderer.draw(points)
+        renderer.draw(points) 
     # conexión total del sistema
     # animate(transformation, renderer, points)
 
