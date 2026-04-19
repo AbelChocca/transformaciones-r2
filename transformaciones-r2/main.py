@@ -115,7 +115,7 @@ class MainWindow(QWidget):
             self.add_input("ky", "ky (opcional)")
 
         elif t == "Reflexión":
-            self.add_input("axis", "Eje (x / y)")
+            self.add_input("theta", "Ángulo (°)")
 
     def add_input(self, key, label):
         lbl = QLabel(label)
@@ -154,8 +154,8 @@ class MainWindow(QWidget):
                     transformation = Scale(kx, float(ky_text))
 
             elif t == "Reflexión":
-                axis = self.inputs["axis"].text().lower()
-                transformation = Reflection(axis)
+                theta = float(self.inputs["theta"].text())
+                transformation = Reflection(np.radians(theta))
 
         except:
             print("Error en inputs ❌")
