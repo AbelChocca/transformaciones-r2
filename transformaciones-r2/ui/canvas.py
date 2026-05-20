@@ -64,67 +64,42 @@ class Canvas(QWidget):
     # ======================
     def draw(self):
         self.ax.clear()
-
-        # BASE 
-        base = np.vstack([self.base_points, self.base_points[0]])
+        
+        self.ax.set_xlim([-5,5])
+        self.ax.set_ylim([-5,5])
+        
+        self.ax.set_xticks(np.arange(-5, 6, 1))
+        self.ax.set_yticks(np.arange(-5, 6, 1))
+        
+        self.ax.axhline(0, color='black', linewidth=1.5)
+        self.ax.axvline(0, color='black', linewidth=1.5)
+        
+        self.ax.grid(True, linestyle=":", alpha=0.5)
+        
+        c = centroid(self.active_points)
+        info_text = f"Centroide: ({c[0]:.2f}, {c[1]:.2f})"
+        
+        self.ax.text(-4.8, 4.3, info_text, fontsize=9, fontfamily='sans-serif',
+                    bbox=dict(facecolor='white', alpha=0.8, edgecolor='gray', boxstyle='round,pad=0.3'))
+        
+        base= np.vstack([self.base_points, self.base_points[0]])
         self.ax.plot(base[:, 0], base[:, 1], 'gray', linestyle="--", alpha=0.5)
-
-        # ACTIVA
+        
         active = np.vstack([self.active_points, self.active_points[0]])
-        self.ax.plot(active[:, 0], active[:, 1], 'r-o', linewidth=2)
-
-        # =========================
-        # BOUNDING BOX (PASO 1)
-        # =========================
-        box = bounding_box(self.active_points)
-        box = np.vstack([box, box[0]])
-
-        self.ax.plot(
-            box[:, 0],
-            box[:, 1],
-            color='white',
-            linestyle='--',
-            linewidth=1.5,
-            alpha=0.9
-        )
-
-        # VÉRTICES
-        for i, p in enumerate(self.active_points):
-            self.ax.scatter(
-                p[0],
-                p[1],
-                s=60,              # tamaño del punto
-                color='white',
-                edgecolors='black',
-                zorder=5,
-                marker='o'
-            )
-
-        # =========================
-        # ROTATION HANDLE
-        # =========================
-        handle = self.get_rotation_handle()
-        self.ax.scatter(
-            handle[0],
-            handle[1],
-            s=80,
-            color='yellow',
-            edgecolors='black',
-            zorder=6
-        )
-
-        self.ax.plot(
-            [centroid(self.active_points)[0], handle[0]],
-            [centroid(self.active_points)[1], handle[1]],
-            'yellow',
-            linestyle='dotted'
-        )
-
-        self.ax.set_aspect('equal')
-        self.ax.grid(True)
-
+        self.ax.plot(active[:, 0], active[:, 1], 'b-', linewidth=2)
+        
+        self.ax.scatter(self.active_points[:, 0], self.active_points[:, 1], color='white', edgecolor='blue', s=60, zorder=3)
+        
+        rot_handle = self.get_rotation_handle()
+        self.ax.scatter([rot_handle[0]], [rot_handle[1]], color='yellow', edgecolor='black', s=80, zorder=4)
+        
+        self.ax.plot([c[0], rot_handle[0]], [c[1], rot_handle[1]], 'orange', linestyle=":", alpha=0.7)
         self.canvas.draw()
 
+    def reset_transformations(self):
+        self.active_points = self.base_points.copy()
+        self.draw()
+        
     # ======================
     # INPUT
     # ======================
@@ -214,7 +189,6 @@ class Canvas(QWidget):
         angle = dx * 5  # sensibilidad
 
         R = Rotation(angle)
-
         c = centroid(self.active_points)
         pts = self.active_points - c
         pts = R.apply(pts)
@@ -225,7 +199,6 @@ class Canvas(QWidget):
         factor = 1 + dx
 
         S = Scale(factor)
-
         c = centroid(self.active_points)
         pts = self.active_points - c
         pts = S.apply(pts)
@@ -236,11 +209,9 @@ class Canvas(QWidget):
     # REFLEXIÓN
     # ======================
     def apply_reflection(self, theta=0.0):
+        
         R = Reflection(theta)
-
-        c = centroid(self.active_points)
-        pts = self.active_points - c
-        self.active_points = R.apply(pts) + c
+        self.active_points = R.apply(self.active_points) 
 
         self.draw()
 
@@ -273,3 +244,11 @@ class Canvas(QWidget):
                 return i
 
         return None
+
+    def homothety(self, k):
+        
+        c = centroid(self.active_points)
+        pts = self.active_points - c
+        self.active_points = (pts * k) + c
+        self.draw()
+        
