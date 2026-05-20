@@ -1,11 +1,12 @@
 import sys
 from PyQt6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout,
-    QHBoxLayout, QLabel, QComboBox, QPushButton
+    QHBoxLayout, QLabel, QComboBox, QPushButton, QLineEdit, QMessageBox
 )
 
 from core.geometry import get_figure
 from ui.canvas import Canvas
+import numpy as np
 
 class MainWindow(QWidget):
     def __init__(self):
@@ -46,14 +47,33 @@ class MainWindow(QWidget):
         toolbar.addWidget(QLabel("Figura:"))
         toolbar.addWidget(self.figure_combo)
 
-        # REFLEXIÓN
-        self.reflection_btn = QPushButton("Reflexión")
-        self.reflection_btn.clicked.connect(self.apply_reflection)
+        #Homotecia
+        self.k_input = QLineEdit()
+        self.k_input.setPlaceholderText("Factor k (ej: 2.0)")
+        self.k_btn = QPushButton("Aplicar Homotecia")
+        self.k_btn.clicked.connect(self.apply_homothety)
 
+        toolbar.addWidget(QLabel("Homotecia (k):"))
+        toolbar.addWidget(self.k_input)
+        toolbar.addWidget(self.k_btn)
+        
+        # REFLEXIÓN
+        toolbar.addWidget(QLabel("Eje de Reflexión:"))
+        
+        self.refl_combo = QComboBox()
+        self.refl_combo.addItems(["Eje X", "Eje Y", "Recta y=x", "Recta y=-x"])
+        toolbar.addWidget(self.refl_combo)
+
+        self.reflection_btn = QPushButton("Reflejar")
+        self.reflection_btn.clicked.connect(self.apply_reflection)
         toolbar.addWidget(self.reflection_btn)
 
+        self.reset_btn =QPushButton("Restablecer")
+        self.reset_btn.clicked.connect(self.reset_canvas)
+        toolbar.addWidget(self.reset_btn)
+        
         layout.addLayout(toolbar)
-
+        
         # ======================
         # CANVAS
         # ======================
@@ -75,5 +95,31 @@ class MainWindow(QWidget):
         self.canvas.draw()
 
     def apply_reflection(self):
-        theta = 0.5  # ejemplo fijo o luego input
+        tipo = self.refl_combo.currentText()
+        
+        if tipo == "Eje X":
+            theta = 0.0        #0 grados
+        elif tipo == "Eje Y":
+            theta = np.pi / 2  #90 grados
+        elif tipo == "Recta y=x":
+            theta = np.pi / 4  #45 grados
+        elif tipo == "Recta y=-x":
+            theta = -np.pi / 4 #-45 grados
+        else:
+            theta = 0.0
+
         self.canvas.apply_reflection(theta)
+        
+    def apply_homothety(self):
+        try:
+            k = float(self.k_input.text())
+            if abs(k) < 0.0001:
+                QMessageBox.warning(self, "Error", "El factor k no puede ser cero porque la figura desaparecería")
+                return
+            self.canvas.homothety(k)
+        except ValueError:
+            QMessageBox.warning(self, "Error", "Por favor ingresa un número válido para el factor k")
+            
+    def reset_canvas(self):
+        self.canvas.reset_transformations()
+        
